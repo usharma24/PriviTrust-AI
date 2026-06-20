@@ -3,11 +3,13 @@ import Login from "./pages/Login";
 import UserWorkspace from "./pages/UserWorkspace";
 import AdminDashboard from "./pages/AdminDashboard";
 import type { LoginResponse, User } from "./services/api";
+import { autoDetectApiUrl } from "./services/api";
 
 export default function App() {
   const [token, setToken] = useState<string | null>(null);
   const [user, setUser] = useState<User | null>(null);
   const [sessionId, setSessionId] = useState<number | null>(null);
+  const [detecting, setDetecting] = useState(true);
 
   // Environmental simulation states passed from login
   const [initialFp, setInitialFp] = useState("alice_macbook_chrome_fingerprint");
@@ -18,6 +20,12 @@ export default function App() {
   const [currentView, setCurrentView] = useState<"workspace" | "admin">("workspace");
 
   useEffect(() => {
+    const init = async () => {
+      await autoDetectApiUrl();
+      setDetecting(false);
+    };
+    init();
+
     const storedToken = localStorage.getItem("privitrust_token");
     const storedUser = localStorage.getItem("privitrust_user");
     const storedSession = localStorage.getItem("privitrust_session_id");
@@ -56,6 +64,39 @@ export default function App() {
     setSessionId(null);
     setCurrentView("workspace");
   };
+
+  // Render dynamic loader during API server auto-detect
+  if (detecting) {
+    return (
+      <div style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        width: "100vw",
+        height: "100vh",
+        backgroundColor: "#0f172a",
+        color: "#ffffff",
+        fontFamily: "sans-serif"
+      }}>
+        <div style={{
+          width: "40px",
+          height: "40px",
+          borderRadius: "50%",
+          border: "4px solid #3b82f6",
+          borderTopColor: "transparent",
+          animation: "spin 1s linear infinite",
+          marginBottom: "16px"
+        }} />
+        <style>{`
+          @keyframes spin {
+            to { transform: rotate(360deg); }
+          }
+        `}</style>
+        <span style={{ fontSize: "1rem", fontWeight: "600", color: "#94a3b8" }}>Locating Secure Gate API Connection...</span>
+      </div>
+    );
+  }
 
   // Render Login page if not authenticated
   if (!token || !user || !sessionId) {

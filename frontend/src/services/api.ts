@@ -1,15 +1,4 @@
-export let API_BASE_URL = (() => {
-  const customUrl = localStorage.getItem("privitrust_api_url");
-  if (customUrl) return customUrl;
-  
-  if (typeof window !== "undefined") {
-    const hostname = window.location.hostname;
-    if (hostname === "localhost" || hostname === "127.0.0.1") {
-      return "http://localhost:8000";
-    }
-  }
-  return "http://192.168.1.10:8000";
-})();
+export let API_BASE_URL = localStorage.getItem("privitrust_api_url") || "http://localhost:8000";
 
 export const setApiBaseUrl = (url: string) => {
   API_BASE_URL = url;
@@ -17,6 +6,39 @@ export const setApiBaseUrl = (url: string) => {
 };
 
 export const getApiBaseUrl = () => API_BASE_URL;
+
+const probeUrl = async (url: string): Promise<boolean> => {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 800);
+    const res = await fetch(`${url}/`, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    return res.ok;
+  } catch (e) {
+    return false;
+  }
+};
+
+export const autoDetectApiUrl = async (): Promise<string> => {
+  if (localStorage.getItem("privitrust_api_url")) {
+    return API_BASE_URL;
+  }
+  
+  const candidates = [
+    "http://localhost:8000",
+    "http://192.168.1.10:8000",
+    "https://16f809b4764337.lhr.life"
+  ];
+  
+  for (const url of candidates) {
+    const isAlive = await probeUrl(url);
+    if (isAlive) {
+      API_BASE_URL = url;
+      return url;
+    }
+  }
+  return API_BASE_URL;
+};
 
 // Helper to get auth headers
 function getHeaders() {
