@@ -10,7 +10,6 @@ import {
   FileSpreadsheet, 
   Trash2, 
   Search, 
-  Filter, 
   UserMinus, 
   Database,
   RefreshCw,
@@ -25,7 +24,6 @@ interface AdminDashboardProps {
 }
 
 export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }: AdminDashboardProps) {
-  const [loading, setLoading] = useState(false);
   const [metrics, setMetrics] = useState<any>(null);
   const [activeSessions, setActiveSessions] = useState<any[]>([]);
   const [securityEvents, setSecurityEvents] = useState<any[]>([]);
@@ -145,7 +143,7 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
   const distribution = metrics?.risk_distribution || { Low: 0, Medium: 0, High: 0, Critical: 0 };
   const trend = metrics?.risk_trend || [];
   
-  const totalRiskCount = Object.values(distribution).reduce((a: any, b: any) => a + b, 0) || 1;
+  const totalRiskCount = (Object.values(distribution).reduce((a: any, b: any) => a + b, 0) as number) || 1;
   const donutData = [
     { label: "Low", value: distribution.Low, color: "hsl(var(--risk-low))" },
     { label: "Medium", value: distribution.Medium, color: "hsl(var(--risk-medium))" },
@@ -157,7 +155,6 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
   let accumulatedAngle = 0;
   const radius = 35;
   const strokeWidth = 10;
-  const center = 50;
 
   return (
     <div className="app-container">
@@ -200,9 +197,11 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
 
         <div className="user-profile-section" style={{ display: "flex", flexDirection: "column", gap: "10px", alignItems: "stretch" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div className="user-avatar" style={{ backgroundColor: "#e0f2fe", color: "#0284c7" }}>SA</div>
+            <div className="user-avatar" style={{ backgroundColor: "#e0f2fe", color: "#0284c7" }}>
+              {user.name.split(" ").map(n => n[0]).join("")}
+            </div>
             <div className="user-details">
-              <div className="user-name">Security Admin</div>
+              <div className="user-name">{user.name}</div>
               <div className="user-role-badge">Administrator</div>
             </div>
           </div>
@@ -379,7 +378,7 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
 
                     <div style={{ display: "flex", flexDirection: "column", gap: "10px", width: "160px" }}>
                       {donutData.map((d) => (
-                        <div key={d.label} style={{ display: "flex", alignItems: "center", justifySpace: "between", fontSize: "0.85rem" }}>
+                        <div key={d.label} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "0.85rem" }}>
                           <span style={{ display: "inline-block", width: "12px", height: "12px", borderRadius: "3px", backgroundColor: d.color, marginRight: "8px" }}></span>
                           <span style={{ fontWeight: "500", flexGrow: "1" }}>{d.label}</span>
                           <span style={{ fontWeight: "700" }}>{d.value}</span>
@@ -410,7 +409,6 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
                       {trend.length > 1 && (
                         (() => {
                           const width = 270;
-                          const height = 80; // 20 to 100 on svg is 80 height
                           const step = width / (trend.length - 1);
                           const points = trend.map((t: any, idx: number) => {
                             const x = 20 + idx * step;
@@ -482,7 +480,7 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
                 
                 {/* Live Sessions list */}
                 <div className="card">
-                  <div style={{ display: "flex", justifySpace: "between", alignItems: "center", marginBottom: "16px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
                     <h3 style={{ fontSize: "1.1rem" }}>Active Employee Sessions</h3>
                     <button onClick={() => setActiveTab("sessions")} style={{ fontSize: "0.8rem", color: "var(--brand)", border: "none", backgroundColor: "transparent", fontWeight: "600", cursor: "pointer" }}>
                       Manage Sessions →
@@ -548,7 +546,7 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
 
                 {/* Threat Events Log Ticker */}
                 <div className="card">
-                  <div style={{ display: "flex", justifySpace: "between", alignItems: "center", marginBottom: "16px" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "16px" }}>
                     <h3 style={{ fontSize: "1.1rem" }}>Continuous Security Warnings</h3>
                     <button onClick={() => setActiveTab("threats")} style={{ fontSize: "0.8rem", color: "var(--brand)", border: "none", backgroundColor: "transparent", fontWeight: "600", cursor: "pointer" }}>
                       Alert Center →

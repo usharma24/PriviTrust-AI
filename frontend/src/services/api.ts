@@ -27,6 +27,7 @@ export interface LoginResponse {
   risk_score: number;
   status: string;
   challenge_required: string | null;
+  otp_simulated?: string | null;
 }
 
 export const api = {

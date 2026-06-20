@@ -10,7 +10,6 @@ import {
   FileText, 
   Fingerprint, 
   Globe, 
-  HelpCircle, 
   Key, 
   Lock, 
   LogOut, 

@@ -24,7 +24,6 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [otpSimulatedMessage, setOtpSimulatedMessage] = useState("");
 
   // Preset accounts for convenience
   const presets = [
@@ -71,7 +70,6 @@ export default function Login({ onLoginSuccess }: LoginProps) {
     e.preventDefault();
     setLoading(true);
     setError("");
-    setOtpSimulatedMessage("");
 
     try {
       const res = await api.login(email, password, deviceFp, browserInfo, osInfo, ipAddress);
