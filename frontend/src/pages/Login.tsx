@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { api } from "../services/api";
+import { api, getApiBaseUrl, setApiBaseUrl } from "../services/api";
 import type { LoginResponse } from "../services/api";
-import { Shield, Lock, Monitor, Globe, Key, AlertTriangle } from "lucide-react";
+import { Shield, Lock, Monitor, Globe, Key, AlertTriangle, Settings } from "lucide-react";
 
 interface LoginProps {
   onLoginSuccess: (data: LoginResponse, customFp: string, customIp: string, customTime: string) => void;
@@ -24,6 +24,8 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [apiUrl, setApiUrl] = useState(getApiBaseUrl());
+  const [showApiSettings, setShowApiSettings] = useState(false);
 
   // Preset accounts for convenience
   const presets = [
@@ -194,13 +196,64 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       {/* Right side: Login and Simulation configuration */}
       <div className="login-right-form">
         <div style={{ width: "100%", maxWidth: "440px" }}>
-          <div style={{ marginBottom: "32px" }}>
+          <div style={{ marginBottom: "24px" }}>
             <h2 style={{ fontSize: "1.75rem", fontWeight: "700", marginBottom: "8px" }}>
               {otpMode ? "Verify Identity" : "Secure Gate Login"}
             </h2>
             <p style={{ color: "var(--text-muted)", fontSize: "0.9rem" }}>
               {otpMode ? "Multi-Factor Authentication required due to elevated access parameters." : "Access bank internal network and administrative systems."}
             </p>
+            
+            <div style={{ display: "flex", marginTop: "12px" }}>
+              <button 
+                type="button" 
+                onClick={() => setShowApiSettings(!showApiSettings)} 
+                style={{ 
+                  display: "flex", 
+                  alignItems: "center", 
+                  gap: "6px", 
+                  fontSize: "0.8rem", 
+                  color: "var(--brand)", 
+                  background: "none", 
+                  border: "none", 
+                  cursor: "pointer",
+                  fontWeight: "600",
+                  padding: "6px 10px",
+                  borderRadius: "6px",
+                  backgroundColor: "var(--brand-light)"
+                }}
+              >
+                <Settings size={14} />
+                <span>API Server Settings</span>
+              </button>
+            </div>
+
+            {showApiSettings && (
+              <div style={{ 
+                marginTop: "12px", 
+                padding: "16px", 
+                backgroundColor: "var(--bg-tertiary)", 
+                border: "1px solid var(--border-color)", 
+                borderRadius: "8px"
+              }}>
+                <label className="form-label" style={{ fontSize: "0.75rem" }} htmlFor="apiUrlInput">Backend API Server URL</label>
+                <input 
+                  id="apiUrlInput"
+                  type="text" 
+                  className="form-input" 
+                  value={apiUrl} 
+                  onChange={(e) => {
+                    setApiUrl(e.target.value);
+                    setApiBaseUrl(e.target.value);
+                  }}
+                  placeholder="http://localhost:8000"
+                  style={{ fontSize: "0.85rem", padding: "8px", marginTop: "4px" }}
+                />
+                <p style={{ color: "var(--text-muted)", fontSize: "0.75rem", marginTop: "8px", lineHeight: "1.3" }}>
+                  * Change this to <code>http://192.168.1.10:8000</code> if loading on your mobile phone on the same Wi-Fi.
+                </p>
+              </div>
+            )}
           </div>
 
           {error && (

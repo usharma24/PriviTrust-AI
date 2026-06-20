@@ -1,4 +1,22 @@
-const API_BASE_URL = "http://localhost:8000";
+export let API_BASE_URL = (() => {
+  const customUrl = localStorage.getItem("privitrust_api_url");
+  if (customUrl) return customUrl;
+  
+  if (typeof window !== "undefined") {
+    const hostname = window.location.hostname;
+    if (hostname === "localhost" || hostname === "127.0.0.1") {
+      return "http://localhost:8000";
+    }
+  }
+  return "http://192.168.1.10:8000";
+})();
+
+export const setApiBaseUrl = (url: string) => {
+  API_BASE_URL = url;
+  localStorage.setItem("privitrust_api_url", url);
+};
+
+export const getApiBaseUrl = () => API_BASE_URL;
 
 // Helper to get auth headers
 function getHeaders() {
