@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ../
+      dockerfile: docker/backend.Dockerfile
+    container_name: privitrust_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - backend_db_volume:/app/database
+    environment:
+      - DATABASE_URL=sqlite:///./database/privitrust.db
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../
+      dockerfile: docker/frontend.Dockerfile
+    container_name: privitrust_frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  backend_db_volume:
