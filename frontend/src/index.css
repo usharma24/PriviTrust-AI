@@ -474,3 +474,221 @@ button, input, select, textarea {
   transform-origin: 50% 50%;
   transition: transform 0.8s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
+
+/* --- Responsiveness Styles --- */
+
+/* Login Page Styles */
+.login-container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+.login-left-banner {
+  flex: 1.2;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px;
+  color: #ffffff;
+}
+
+.login-right-form {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 60px 40px;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+.login-sim-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* Dashboard Grids */
+.dashboard-double-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.dashboard-split-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 24px;
+}
+
+.dashboard-reports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.donut-chart-container {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  justify-content: center;
+  min-height: 180px;
+}
+
+/* Sidebar Toggle Mechanics */
+.sidebar-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(15, 23, 42, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 99;
+}
+
+.sidebar-close-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: var(--transition-smooth);
+}
+
+.sidebar-close-btn:hover {
+  background-color: var(--bg-tertiary);
+  color: var(--primary);
+}
+
+.sidebar-toggle-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--primary);
+  cursor: pointer;
+  margin-right: 16px;
+  padding: 8px;
+  border-radius: 8px;
+  background-color: var(--bg-tertiary);
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth);
+}
+
+.sidebar-toggle-btn:hover {
+  background-color: var(--border-color);
+}
+
+/* Media Queries Breakpoints */
+
+/* Tablet & Smaller Laptops */
+@media (max-width: 1024px) {
+  .sim-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dashboard-double-grid,
+  .dashboard-split-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Mobile & Portrait Tablets */
+@media (max-width: 900px) {
+  .login-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+  
+  .login-left-banner {
+    display: none; /* Hide decorative panel on mobile */
+  }
+  
+  .login-right-form {
+    width: 100%;
+    height: auto;
+    padding: 48px 24px;
+    overflow-y: visible;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Sidebar Drawer styling */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar-overlay.active {
+    display: block;
+  }
+  
+  .sidebar-close-btn {
+    display: block;
+  }
+  
+  .sidebar-toggle-btn {
+    display: flex;
+  }
+  
+  .main-content {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: visible;
+  }
+  
+  .header-bar {
+    padding: 16px 20px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  
+  .header-bar > div:first-of-type {
+    flex-grow: 1;
+  }
+  
+  .content-body {
+    padding: 20px;
+  }
+  
+  .metrics-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Small Screens */
+@media (max-width: 580px) {
+  .metrics-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .donut-chart-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .login-sim-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

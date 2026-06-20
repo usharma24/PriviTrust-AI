@@ -12,11 +12,13 @@ import {
   Globe, 
   Key, 
   Lock, 
-  LogOut, 
+  LogOut,
   AlertTriangle, 
   CheckCircle,
   ShieldCheck,
-  Smartphone
+  Smartphone,
+  Menu,
+  X
 } from "lucide-react";
 
 interface UserWorkspaceProps {
@@ -57,6 +59,9 @@ export default function UserWorkspace({
 
   // Live Risk Indicator
   const [liveRisk, setLiveRisk] = useState(0);
+
+  // Mobile responsiveness state
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Adaptive Challenges state
   const [challengeType, setChallengeType] = useState<"OTP" | "ReAuth" | null>(null);
@@ -238,17 +243,25 @@ export default function UserWorkspace({
 
   return (
     <div className="app-container">
+      {/* Mobile overlay backdrop */}
+      <div className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`} onClick={() => setSidebarOpen(false)} />
+
       {/* Workspace Sidebar */}
-      <div className="sidebar">
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div>
-          <div className="brand-section">
-            <div className="brand-logo">P</div>
-            <div>
-              <span className="brand-title">PriviTrust AI</span>
-              <div style={{ fontSize: "0.65rem", color: "var(--brand)", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px", marginTop: "2px" }}>
-                Active Session
+          <div className="brand-section" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div className="brand-logo">P</div>
+              <div>
+                <span className="brand-title">PriviTrust AI</span>
+                <div style={{ fontSize: "0.65rem", color: "var(--brand)", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px", marginTop: "2px" }}>
+                  Active Session
+                </div>
               </div>
             </div>
+            <button className="sidebar-close-btn" onClick={() => setSidebarOpen(false)}>
+              <X size={18} />
+            </button>
           </div>
 
           <div style={{ padding: "0 12px 20px 12px", borderBottom: "1px solid var(--border-color)", marginBottom: "20px" }}>
@@ -328,6 +341,9 @@ export default function UserWorkspace({
       {/* Main Workspace Frame */}
       <div className="main-content">
         <div className="header-bar">
+          <button className="sidebar-toggle-btn" onClick={() => setSidebarOpen(true)}>
+            <Menu size={20} />
+          </button>
           <div>
             <h1 style={{ fontSize: "1.5rem", letterSpacing: "-0.01em" }}>Employee Workspace</h1>
             <p style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>

@@ -143,17 +143,9 @@ export default function Login({ onLoginSuccess }: LoginProps) {
   };
 
   return (
-    <div style={{ display: "flex", width: "100vw", height: "100vh", backgroundColor: "var(--bg-primary)" }}>
+    <div className="login-container">
       {/* Left side: Premium Banking Branding */}
-      <div style={{ 
-        flex: "1.2", 
-        background: "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)", 
-        display: "flex", 
-        flexDirection: "column", 
-        justifyContent: "space-between", 
-        padding: "48px", 
-        color: "#ffffff" 
-      }}>
+      <div className="login-left-banner">
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           <div style={{ 
             width: "40px", 
@@ -200,16 +192,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
       </div>
 
       {/* Right side: Login and Simulation configuration */}
-      <div style={{ 
-        flex: "1", 
-        display: "flex", 
-        flexDirection: "column",
-        alignItems: "center", 
-        justifyContent: "flex-start", 
-        padding: "60px 40px", 
-        overflowY: "auto",
-        height: "100vh"
-      }}>
+      <div className="login-right-form">
         <div style={{ width: "100%", maxWidth: "440px" }}>
           <div style={{ marginBottom: "32px" }}>
             <h2 style={{ fontSize: "1.75rem", fontWeight: "700", marginBottom: "8px" }}>
@@ -343,7 +326,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
                   <span>SIMULATION ENVIRONMENTAL FACTOR INJECTION</span>
                 </div>
                 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px" }}>
+                <div className="login-sim-grid">
                   <div className="form-group" style={{ marginBottom: "8px" }}>
                     <label className="form-label" style={{ fontSize: "0.75rem" }} htmlFor="simIp">Simulated IP</label>
                     <input
@@ -369,7 +352,7 @@ export default function Login({ onLoginSuccess }: LoginProps) {
                   </div>
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginTop: "4px" }}>
+                <div className="login-sim-grid" style={{ marginTop: "4px" }}>
                   <div className="form-group" style={{ marginBottom: "0" }}>
                     <label className="form-label" style={{ fontSize: "0.75rem" }} htmlFor="simOs">Simulated OS</label>
                     <input

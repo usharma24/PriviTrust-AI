@@ -14,7 +14,9 @@ import {
   Database,
   RefreshCw,
   AlertTriangle,
-  FileText
+  FileText,
+  Menu,
+  X
 } from "lucide-react";
 
 interface AdminDashboardProps {
@@ -39,6 +41,9 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
 
   // Auto-refresh states
   const [autoRefresh, setAutoRefresh] = useState(true);
+
+  // Mobile responsiveness state
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const fetchDashboardData = async () => {
     try {
@@ -158,17 +163,25 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
 
   return (
     <div className="app-container">
+      {/* Mobile overlay backdrop */}
+      <div className={`sidebar-overlay ${sidebarOpen ? 'active' : ''}`} onClick={() => setSidebarOpen(false)} />
+
       {/* Sidebar navigation */}
-      <div className="sidebar">
+      <div className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div>
-          <div className="brand-section">
-            <div className="brand-logo" style={{ background: "linear-gradient(135deg, #10b981, #059669)" }}>A</div>
-            <div>
-              <span className="brand-title">PriviTrust Admin</span>
-              <div style={{ fontSize: "0.65rem", color: "#10b981", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px", marginTop: "2px" }}>
-                Security Center
+          <div className="brand-section" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+              <div className="brand-logo" style={{ background: "linear-gradient(135deg, #10b981, #059669)" }}>A</div>
+              <div>
+                <span className="brand-title">PriviTrust Admin</span>
+                <div style={{ fontSize: "0.65rem", color: "#10b981", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "1px", marginTop: "2px" }}>
+                  Security Center
+                </div>
               </div>
             </div>
+            <button className="sidebar-close-btn" onClick={() => setSidebarOpen(false)}>
+              <X size={18} />
+            </button>
           </div>
 
           <ul className="nav-list">
@@ -243,6 +256,9 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
       {/* Main Panel Frame */}
       <div className="main-content">
         <div className="header-bar">
+          <button className="sidebar-toggle-btn" onClick={() => setSidebarOpen(true)}>
+            <Menu size={20} />
+          </button>
           <div>
             <h1 style={{ fontSize: "1.5rem" }}>Security Intelligence Panel</h1>
             <p style={{ color: "var(--text-muted)", fontSize: "0.85rem" }}>
@@ -333,12 +349,12 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
             <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
               
               {/* Row: SVG Charts */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+              <div className="dashboard-double-grid">
                 
                 {/* Segmented Donut Chart */}
                 <div className="card">
                   <h3 style={{ fontSize: "1.1rem", marginBottom: "20px" }}>Active Session Risk Allocation</h3>
-                  <div style={{ display: "flex", alignItems: "center", gap: "32px", justifyContent: "center", minHeight: "180px" }}>
+                  <div className="donut-chart-container">
                     
                     <div style={{ width: "140px", height: "140px", position: "relative" }}>
                       <svg width="140" height="140" viewBox="0 0 100 100">
@@ -476,7 +492,7 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
               </div>
 
               {/* Row: Live Alerts ticker and session list summary */}
-              <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: "24px" }}>
+              <div className="dashboard-split-grid">
                 
                 {/* Live Sessions list */}
                 <div className="card">
@@ -830,7 +846,7 @@ export default function AdminDashboard({ user, onLogout, onNavigateToWorkspace }
                 Generate and download compliance records compiling privileged access logs and anomalies.
               </p>
 
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: "20px" }}>
+              <div className="dashboard-reports-grid">
                 
                 <div style={{ border: "1px solid var(--border-color)", padding: "20px", borderRadius: "10px", backgroundColor: "var(--bg-tertiary)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
